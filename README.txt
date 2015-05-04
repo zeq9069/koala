@@ -10,28 +10,28 @@
 
 （1）项目简介：
    
-     	在公司开发的过程中，用到主从库的切换，于是就想自己动手实现一个可以实现多库之间的随意切换。
-     于是该项目就产生了！该项目基于spring2.0添加的AbstractRutingDataSource的类，同时利用
-     AspectJ项目实现aop,从而实现数据源的动态切换。
+    在公司开发的过程中，用到主从库的切换，于是就想自己动手实现一个可以实现多库之间的随意切换。
+  于是该项目就产生了！该项目基于spring2.0添加的AbstractRutingDataSource的类，同时利用AspectJ项
+  目实现aop,从而实现数据源的动态切换。
  
 （2）功能目标：
 	
-		该项目基本上确定了所拥有的功能：
+	  该项目基本上确定了所拥有的功能：
 		
-	<1>通过注解项目中自定义的@ChangeFor注解来实现，将该注解放到service层的方法的前即可,
-	   该注解拥有默认的数据源
+	   <1>通过注解项目中自定义的@ChangeFor注解来实现，将该注解放到service层的方法的前即可,该注解
+	      拥有默认的数据源
 	
-	<2>还可以手动切换，利用DynamicDataSource.changeFor()方法来实现。手动切换只能用在
-	   一种情况下，那就是事务必须在数据持久层进行管理，在@Transaction下失效。
+	   <2>还可以手动切换，利用DynamicDataSource.changeFor()方法来实现。手动切换只能用在一种情况下，
+	      那就是事务必须在数据持久层进行管理，在@Transaction下失效。
 	 
 	   
-	<3>可以通过注解@DataSourceDistribute注解，对service层的实现类进行类级别的注解，
-	   然后可通过正则表达式来实现针对不同的方法使用指定的注解。
+	   <3>可以通过注解@DataSourceDistribute注解，对service层的实现类进行类级别的注解，然后可通过正
+	      则表达式来实现针对不同的方法使用指定的注解。
 	   
 	  
 	 后期添加功能：
 	   
-	<1>负载均衡。在配置了多主多从的数据源的情况下，可以根据主库或者从库的负载和切换算法来实现简单的负载均衡。
+	  <1>负载均衡。在配置了多主多从的数据源的情况下，可以根据主库或者从库的负载和切换算法来实现简单的负载均衡。
 	   (不知道这在真正的项目使用中是否有意义，不过，我还是决定实现一下)
 	
 	   
@@ -72,22 +72,21 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="hibernateProperties">
 			<props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect </prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-            </props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect </prop>
+          <prop key="hibernate.show_sql">true</prop>
+          <prop key="hibernate.format_sql">true</prop>
+          <prop key="hibernate.hbm2ddl.auto">update</prop>
+        </props>
 		</property>
 		 <property name="packagesToScan">
-            <list>
-                <value>com.demo.AspectJDemo.domain</value>
-            </list>
-        </property>
+        <list>
+          <value>com.demo.AspectJDemo.domain</value>
+        </list>
+    </property>
 	</bean>
- 	<bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
+ 	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
  
 
 	spring.xml中的配置：
@@ -97,8 +96,8 @@
 
 （4）遇到的问题：
 
-    <1>遇到的最大的问题，就是当使用@Transaction注解时，@ChangeFor和@DataSourceDistribute注解
-       切换数据源失败！这是因为@Transaction注解先于自定义的注解运行了！最后通过加Order来实现了顺序的颠倒。
+    <1>遇到的最大的问题，就是当使用@Transaction注解时，@ChangeFor和@DataSourceDistribute注解切换数据源
+      失败！这是因为@Transaction注解先于自定义的注解运行了！最后通过加Order来实现了顺序的颠倒。
        
  
  
