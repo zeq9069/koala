@@ -90,14 +90,54 @@
 	<!-- 只用cglib代理，替换掉默认的JDK动态代理,order必须大于@Aspect的order，也就是必须大于0-->
 	<aop:aspectj-autoproxy proxy-target-class="true" order="6000"/>
 
-##_(4)遇到的问题_：
+##_(4)使用案例_
+
+    //@DataSourceDistribute和@changeFor同时使用时，符合“就近原则”，
+    //@changeFor会覆盖@DataSourceDistribute
+
+    @Service("userService")
+    @DataSourceDistribute(value={@DataSourceEntity(method="create*|delete*|update*"),
+	    @DataSourceEntity(dataSource="slave",method="find*")})
+    public class UserServiceImpl implements UserService{
+
+	  private static Logger logger=Logger.getLogger(UserServiceImpl.class);
+	
+	  @Autowired
+  	private UserReponsitory userReponsitory;
+	
+	  @ChangeFor
+	  @Transactional(readOnly=false)
+	  public String create() {
+		  logger.info("Starting create a new User !");
+		  userReponsitory.create();
+		  return "success";
+	  }
+
+	    @Transactional(readOnly=false)
+	   public void delete(String id) {
+		  logger.info("Starting dalete a new User !");
+		  userReponsitory.create();
+	  }
+
+	  @ChangeFor(value="slave")
+	  @Transactional(readOnly=false)
+	  public void update() {
+		  logger.info("Starting update a new User !");
+	 }
+	  @ChangeFor(value="slave")
+	  @Transactional(readOnly=true)
+	  public void search() {
+		 logger.info("Starting search a new User !");
+	 }
+}
+##_(5)遇到的问题_：
 
 1.遇到的最大的问题，就是当使用@Transaction注解时，@ChangeFor和@DataSourceDistribute注解切换数据源
   失败！这是因为@Transaction注解先于自定义的注解运行了！最后通过加Order来实现了顺序的颠倒。
        
  
  
-##_(5)详细的demo请看另一个demo项目:_
+##_(6)详细的demo请看另一个demo项目:_
       
 [mydemo/AspectJDemo](https://github.com/zeq9069/mydemo/tree/master/AspectJDemo)
        
