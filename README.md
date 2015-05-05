@@ -92,8 +92,8 @@
 
 ##_(4)使用案例_
 
-    //@DataSourceDistribute和@changeFor同时使用时，符合“就近原则”，
-    //@changeFor会覆盖@DataSourceDistribute
+    //@DataSourceDistribute和@changeTo同时使用时，符合“就近原则”，
+    //@changeTo会覆盖@DataSourceDistribute
 
     @Service("userService")
     @DataSourceDistribute(value={@DataSourceEntity(method="create*|delete*|update*"),
@@ -105,7 +105,7 @@
 	  @Autowired
   	private UserReponsitory userReponsitory;
 	
-	  @ChangeFor
+	  @changeTo
 	  @Transactional(readOnly=false)
 	  public String create() {
 		  logger.info("Starting create a new User !");
@@ -119,12 +119,12 @@
 		  userReponsitory.create();
 	  }
 
-	  @ChangeFor(value="slave")
+	  @changeTo(value="slave")
 	  @Transactional(readOnly=false)
 	  public void update() {
 		  logger.info("Starting update a new User !");
 	 }
-	  @ChangeFor(value="slave")
+	  @changeTo(value="slave")
 	  @Transactional(readOnly=true)
 	  public void search() {
 		 logger.info("Starting search a new User !");
