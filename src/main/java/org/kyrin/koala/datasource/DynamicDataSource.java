@@ -45,7 +45,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource{
 		super.afterPropertiesSet();
 	}
 	
-	public static void changeFor(String target){
+	public static void changeTo(String target){
 		logger.info("Change current dataSource to "+target);
 		Stack<String> current=threadLocal.get();
 		current.push(target);
