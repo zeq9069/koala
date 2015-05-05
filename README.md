@@ -6,13 +6,13 @@
 作者：kyrin(云中鹤)   kyrincloud@qq.com
 *******************************************
 
-##_项目简介_：
+##_项目简介_
    
         在公司开发的过程中，用到主从库的切换，于是就想自己动手实现一个可以实现多库之间的随意切换。
     于是该项目就产生了！该项目基于spring2.0.1才添加的的AbstractRutingDataSource类，同时利用AspectJ项目实现aop,
     从而实现数据源的动态切换。
  
-##_功能目标_：
+##_功能目标_
 	
 #####该项目基本上确定了所拥有的功能：
 1.通过注解项目中自定义的@ChangeFor注解来实现，将该注解放到service层的方法的前即可,该注解
@@ -31,7 +31,7 @@
 	   (不知道这在真正的项目使用中是否有意义，不过，我还是决定实现一下)
 	
 	   
-##_配置方式_:
+##_配置方式_
 
 		在配置DynamicDataSource数据源的时候，必须配置defaultTargetDataSource在这个关键字对应的数据源，否则报错！
 	defaultTargetDataSource是默认数据源。
@@ -130,14 +130,14 @@
 		 logger.info("Starting search a new User !");
 	 }
 }
-##_遇到的问题_：
+##_遇到的问题_
 
 1.遇到的最大的问题，就是当使用@Transaction注解时，@ChangeFor和@DataSourceDistribute注解切换数据源
   失败！这是因为@Transaction注解先于自定义的注解运行了！最后通过加Order来实现了顺序的颠倒。
        
  
  
-##_详细的demo请看另一个demo项目:_
+##_详细的demo请看另一个demo项目_
       
 [mydemo/AspectJDemo](https://github.com/zeq9069/mydemo/tree/master/AspectJDemo)
        
