@@ -65,7 +65,7 @@ public class DataSourceAspect {
 		if(entity!=null){
 			for(DataSourceEntity dse:entity){
 				if(Pattern.matches(dse.method(), name)){
-					DynamicDataSource.changeFor(dse.dataSource());
+					DynamicDataSource.changeTo(dse.dataSource());
 					return;
 				}
 			}
@@ -79,9 +79,9 @@ public class DataSourceAspect {
 		Method method=sig.getMethod();
 		Annotation annotation=method.getAnnotation(ChangeTo.class);
 		if(annotation!=null){
-			ChangeTo changeFor=(ChangeTo)annotation;
-			DynamicDataSource.changeFor(changeFor.value());
-			logger.info("Success change dataSource to ："+changeFor.value());
+			ChangeTo changeTo=(ChangeTo)annotation;
+			DynamicDataSource.changeTo(changeTo.value());
+			logger.info("Success change dataSource to ："+changeTo.value());
 		}
 		pj.proceed();
 		logger.info("The Around has been stop !");
