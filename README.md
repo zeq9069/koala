@@ -9,8 +9,8 @@
 ##_(1)项目简介_：
    
         在公司开发的过程中，用到主从库的切换，于是就想自己动手实现一个可以实现多库之间的随意切换。
-    于是该项目就产生了！该项目基于spring2.0添加的AbstractRutingDataSource的类，同时利用AspectJ项
-    目实现aop,从而实现数据源的动态切换。
+    于是该项目就产生了！该项目基于spring的AbstractRutingDataSource类，同时利用AspectJ项目实现aop,
+    从而实现数据源的动态切换。
  
 ##_(2)功能目标_：
 	
