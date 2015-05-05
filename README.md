@@ -15,10 +15,10 @@
 ##_功能目标_
 	
 #####该项目基本上确定了所拥有的功能：
-1.通过注解项目中自定义的@ChangeFor注解来实现，将该注解放到service层的方法的前即可,该注解
+1.通过注解项目中自定义的@ChangeTo注解来实现，将该注解放到service层的方法的前即可,该注解
 	    拥有默认的数据源
 	
-2.还可以手动切换，利用DynamicDataSource.changeFor()方法来实现。手动切换只能用在一种情况下，
+2.还可以手动切换，利用DynamicDataSource.changeTo()方法来实现。手动切换只能用在一种情况下，
 	    那就是事务必须在数据持久层进行管理，在@Transaction下失效。
 	 
 	   
@@ -132,7 +132,7 @@
 }
 ##_遇到的问题_
 
-1.遇到的最大的问题，就是当使用@Transaction注解时，@ChangeFor和@DataSourceDistribute注解切换数据源
+1.遇到的最大的问题，就是当使用@Transaction注解时，@ChangeTo和@DataSourceDistribute注解切换数据源
   失败！这是因为@Transaction注解先于自定义的注解运行了！最后通过加Order来实现了顺序的颠倒。
        
  
