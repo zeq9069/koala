@@ -25,7 +25,7 @@
 3.可以通过注解@DataSourceDistribute注解，对service层的实现类进行类级别的注解，然后可通过正
 	则表达式来实现针对不同的方法使用指定的注解。
 	  
-4.负载均衡。在配置了多主多从的数据源的情况下，利用@DataSourceGroup把service层的方法与数据
+4.负载均衡。(在V1.0版本中没有此功能)在配置了多主多从的数据源的情况下，利用@DataSourceGroup把service层的方法与数据
   源组进行对应，当方法执行时，自动从数据源组中轮训数据源进行切换，从而达到均衡负载的目的。
 	
 	   
@@ -138,6 +138,8 @@
  
 
 ####spring.xml中的配置：
+	<!-- Aspect进行注册 -->
+	<bean id="dataSourceAspect" class="org.kyrin.koala.aspect.DataSourceAspect" />
 	
 	<!-- 只用cglib代理，替换掉默认的JDK动态代理,order必须大于@Aspect的order，也就是必须大于0-->
 	<aop:aspectj-autoproxy proxy-target-class="true" order="6000"/>
