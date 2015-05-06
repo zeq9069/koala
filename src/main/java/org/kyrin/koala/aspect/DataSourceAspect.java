@@ -2,6 +2,8 @@ package org.kyrin.koala.aspect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Stack;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
@@ -15,8 +17,11 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.kyrin.koala.annotation.ChangeTo;
 import org.kyrin.koala.annotation.DataSourceDistribute;
 import org.kyrin.koala.annotation.DataSourceEntity;
+import org.kyrin.koala.annotation.DataSourceGroup;
+import org.kyrin.koala.annotation.Group;
 import org.kyrin.koala.datasource.DynamicDataSource;
 import org.springframework.core.annotation.Order;
+
 
 
 /**
@@ -42,8 +47,15 @@ public class DataSourceAspect {
 	@Pointcut(value="@within(org.kyrin.koala.annotation.DataSourceDistribute)")
 	public void inWebServiceClass(){}
 	
-	@Before(value="inWebServiceClass()")
-	public void classBefore(JoinPoint jp){
+	@Pointcut(value="@within(org.kyrin.koala.annotation.DataSourceGroup)")
+	public void inWebServiceClass2(){}
+	
+	@Pointcut(value="inWebServiceClass() || inWebServiceClass2()")
+	public void all(){}
+	
+	//添加synchronized关键字，避免在同一个group下的数据源轮训不均匀
+	@Before(value="all()")
+	public synchronized void classBefore(JoinPoint jp){
 		MethodSignature sig=(MethodSignature) jp.getSignature();
 		Method method=sig.getMethod();
 		String name=method.getName();
@@ -51,25 +63,46 @@ public class DataSourceAspect {
 		if(annotation!=null){
 			return;
 		}
-		Object targetObj=jp.getTarget();
-		Annotation[] anns=targetObj.getClass().getAnnotations();
-		DataSourceEntity [] entity=null;
-		for(Annotation an:anns){
-			if(an instanceof DataSourceDistribute){
-				DataSourceDistribute dsd=(DataSourceDistribute)an;
-				entity=dsd.value();
-				break;
+		Object obj=jp.getTarget();
+		DataSourceDistribute dataSourceDistribute=obj.getClass().getAnnotation(DataSourceDistribute.class);
+		DataSourceGroup dataSourceGroup=obj.getClass().getAnnotation(DataSourceGroup.class);
+		if(dataSourceDistribute!=null){
+			if(dealDataSourceDistribute(dataSourceDistribute,name)){
+				return;
 			}
+			
 		}
-		
+		if(dataSourceGroup!=null){
+			dealDataSourceGroup(dataSourceGroup,name);
+		}
+	}
+	
+	private  boolean dealDataSourceDistribute(DataSourceDistribute dataSourceDistribute,String methodName){
+		DataSourceEntity [] entity=dataSourceDistribute.value();
 		if(entity!=null){
-			for(DataSourceEntity dse:entity){
-				if(Pattern.matches(dse.method(), name)){
-					DynamicDataSource.changeTo(dse.dataSource());
-					return;
+			for(DataSourceEntity en:entity){
+				if(Pattern.matches(en.methodPattern(), methodName)){
+					DynamicDataSource.changeTo(en.dataSource());
+					return true;
 				}
 			}
 		}
+		
+		return false;
+	}
+	
+	private  boolean dealDataSourceGroup(DataSourceGroup dataSourceGroup,String methodName){
+		Group[] groups=dataSourceGroup.groups();
+		if(groups!=null){
+			for(Group group:groups){
+				if(Pattern.matches(group.methodPattern(), methodName)){
+					DynamicDataSource.getInstance().changeToByGroup(group.groupName());
+					return true;
+				}
+			}
+		}	
+		
+		return false;
 	}
 	
 	@Around(value="inWebSevice()")

@@ -22,5 +22,5 @@ public @interface DataSourceEntity{
 	 * 指定的这些方法统一使用dataSource作为数据源
 	 * @return
 	 */
-	String method() default "";
+	String methodPattern() default "";
 }
