@@ -32,7 +32,12 @@
 ####支持数据源分组和简单的负载均衡(轮询)
 1.负载均衡。在配置了多主多从的数据源的情况下，利用@DataSourceGroup把service层的方法与数据
   源组进行对应，当方法执行时，自动从数据源组中轮训数据源进行切换，从而达到均衡负载的目的。
-	
+
+####后期添加功能：
+1.监控模块和过滤功能。后期会添加对你添加的每个注解进行流量监控，可以查看每个注解的流量大小，还可以
+   进行限流，当某个注解的并发访问量查过你设置的最大的值时，会放弃请求。你自己也可以对过滤某块进行扩展，
+   将你实现的过滤类进行设置，注入到aspect中，在每个注解运行前后都会执行。
+
 	   
 ##_配置方式_
 
@@ -40,9 +45,9 @@
 	defaultTargetDataSource是默认数据源。
 
 ####db.xml中的配置：
-	
+
     <bean id="dataSource1" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-     <property name="driverClass" value="com.mysql.jdbc.Driver" />
+      	<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		 <property name="jdbcUrl"
 		   value="jdbc:mysql://localhost:3306/demo?useUnicode=true&amp;characterEncoding=UTF-8"/>
 		 <property name="user" value="root"/>
