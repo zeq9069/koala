@@ -68,7 +68,6 @@ public class DataSourceAspect {
 			if(dealDataSourceDistribute(dataSourceDistribute,name)){
 				return;
 			}
-			
 		}
 		if(dataSourceGroup!=null){
 			dealDataSourceGroup(dataSourceGroup,name);
@@ -85,7 +84,6 @@ public class DataSourceAspect {
 				}
 			}
 		}
-		
 		return false;
 	}
 	
@@ -99,7 +97,6 @@ public class DataSourceAspect {
 				}
 			}
 		}	
-		
 		return false;
 	}
 	

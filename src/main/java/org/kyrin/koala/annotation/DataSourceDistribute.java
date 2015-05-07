@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * ***************************
  * 
- *  自定义注解
+ *  数据源分发注解
  *  
  * ***************************
  * @author kyrin kyrincloud@qq.com 

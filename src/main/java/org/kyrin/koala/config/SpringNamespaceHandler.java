@@ -9,5 +9,4 @@ public class SpringNamespaceHandler extends NamespaceHandlerSupport{
 	 public void init() {
 	        registerBeanDefinitionParser("default-aspect", new KoalaAspectBeanDefinitionParser());
 	    }
-
 }
