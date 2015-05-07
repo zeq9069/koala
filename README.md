@@ -100,7 +100,8 @@
 				<entry key="slave2" value-ref="dataSource3" />
 				<entry key="slave3" value-ref="dataSource4" />
 			</map>
-		</property>
+		</property>		
+		<!--（可选项）对上述的 key值进行分组配置，让数据源切换时，可以通过注解@DataSourceGroup按组进行轮训切换，这样也可以达到负载均衡的效果-->		
 		<property name="dataSourceKeysGroup">
 			<map>
 				<entry key="master-group">
@@ -140,9 +141,8 @@
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
  
- 
 
-####spring.xml中的配置：
+####spring.xml中的配置：（必须注册）
 	<!-- Aspect进行注册 -->
 	<bean id="dataSourceAspect" class="org.kyrin.koala.aspect.DataSourceAspect" />
 	
