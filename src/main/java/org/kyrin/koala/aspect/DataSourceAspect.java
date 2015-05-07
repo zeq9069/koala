@@ -2,8 +2,6 @@ package org.kyrin.koala.aspect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Stack;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
